@@ -37,6 +37,10 @@ res_root: "@WORKSPACEROOT/src/main/resources"
 mod_assets_root: "@RESROOT/assets/@modid"
 mod_data_root: "@RESROOT/data/@modid"
 
+# run folders
+client_run_dir: "@WORKSPACEROOT/runs/client"
+server_run_dir: "@WORKSPACEROOT/runs/server"
+
 # specific resource folders
 sounds_dir: "@MODASSETSROOT/sounds"
 structures_dir: "@MODDATAROOT/structures"
