@@ -1,4 +1,7 @@
 <#include "mcitems.ftl">
+<#function hasToolContext>
+  <#return data.type == "Block" || data.type == "Fishing" || data.type == "Generic">
+</#function>
 {
   "type": "minecraft:${data.type?lower_case?replace(" ", "_")}",
   "pools": [
@@ -28,7 +31,7 @@
                 "type": "minecraft:${entry.type}",
                 "name": "${mappedMCItemToRegistryName(entry.item)}",
                 "weight": ${entry.weight},
-                <#if entry.silkTouchMode == 1>
+                <#if entry.silkTouchMode == 1 && hasToolContext()>
                 "conditions": [
                   {
                     "condition": "minecraft:match_tool",
@@ -36,7 +39,7 @@
                       "predicates": {
                         "minecraft:enchantments": [
                           {
-                            "enchantment": "minecraft:silk_touch",
+                            "enchantments": "minecraft:silk_touch",
                             "levels": {
                               "min": 1
                             }
@@ -46,7 +49,7 @@
                     }
                   }
                 ],
-                <#elseif entry.silkTouchMode == 2>
+                <#elseif entry.silkTouchMode == 2 && hasToolContext()>
                 "conditions": [
                   {
                     "condition": "minecraft:inverted",
@@ -56,7 +59,7 @@
                           "predicates": {
                             "minecraft:enchantments": [
                               {
-                                "enchantment": "minecraft:silk_touch",
+                                "enchantments": "minecraft:silk_touch",
                                 "levels": {
                                   "min": 1
                                 }
@@ -70,7 +73,7 @@
                 </#if>
                 "functions": [
                     {
-                      "function": "set_count",
+                      "function": "minecraft:set_count",
                       "count": {
                         "min": ${entry.minCount},
                         "max": ${entry.maxCount}
@@ -78,8 +81,7 @@
                     }
                     <#if entry.minEnchantmentLevel != 0 || entry.maxEnchantmentLevel != 0>
                     ,{
-                      "function": "enchant_with_levels",
-                      "treasure": true,
+                      "function": "minecraft:enchant_with_levels",
                       "levels": {
                         "min": ${entry.minEnchantmentLevel},
                         "max": ${entry.maxEnchantmentLevel}
@@ -91,7 +93,7 @@
                       "function": "minecraft:explosion_decay"
                     }
                     </#if>
-                    <#if entry.affectedByFortune>
+                    <#if entry.affectedByFortune && hasToolContext()>
                     ,{
                       "function": "minecraft:apply_bonus",
                       "enchantment": "minecraft:fortune",

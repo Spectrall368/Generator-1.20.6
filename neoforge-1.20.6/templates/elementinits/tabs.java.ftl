@@ -57,9 +57,11 @@ public class ${JavaModName}Tabs {
 			.title(Component.translatable("item_group.${modid}.${tab.getModElement().getRegistryName()}"))
 			.icon(() -> ${mappedMCItemToItemStackCode(tab.icon, 1)})
 			.displayItems((parameters, tabData) -> {
+				<#if tabName == "OP_BLOCKS">if (tabData.hasPermissions()) {</#if>
 							<#list tabMap.get("CUSTOM:" + tab.getModElement().getName()) as tabElement>
 							tabData.accept(${mappedMCItemToItem(tabElement)});
 							</#list>
+				<#if tabName == "OP_BLOCKS">}</#if>
 	})
 		<#if tab.showSearch>.withSearchBar()</#if>
 						.build()
