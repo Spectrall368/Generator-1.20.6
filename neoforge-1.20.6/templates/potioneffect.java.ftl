@@ -38,7 +38,29 @@ public class ${name}MobEffect extends <#if data.isInstant>Instantenous</#if>MobE
 
 	public ${name}MobEffect() {
 		super(MobEffectCategory.${data.mobEffectCategory}, ${data.color.getRGB()});
+		<#if data.onAddedSound?has_content && data.onAddedSound.getMappedValue()?has_content>
+		this.withSoundOnAdded(BuiltInRegistries.SOUND_EVENT.get(new ResourceLocation("${data.onAddedSound}")));
+		</#if>
+		<#list data.modifiers as modifier>
+		this.addAttributeModifier(${modifier.attribute},
+				new ResourceLocation(${JavaModName}.MODID, "effect.${registryname}_${modifier?index}"),
+				${modifier.amount}, AttributeModifier.Operation.${modifier.operation});
+		</#list>
 	}
+
+	<#if data.hasCustomParticle()>
+	@Override public ParticleOptions createParticleOptions(MobEffectInstance mobEffectInstance) {
+		return ${data.particle};
+	}
+	</#if>
+
+	<#if data.isCuredbyHoney>
+	@Override public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
+		cures.add(EffectCures.MILK);
+		cures.add(EffectCures.PROTECTED_BY_TOTEM);
+		cures.add(EffectCures.HONEY);
+	}
+	</#if>
 
 	<#if hasProcedure(data.onStarted)>
 		<#if data.isInstant>
@@ -90,26 +112,56 @@ public class ${name}MobEffect extends <#if data.isInstant>Instantenous</#if>MobE
 		}
 	</#if>
 
-	<#if data.hasCustomRenderer()>
-		@Override public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-			consumer.accept(new IClientMobEffectExtensions() {
-				<#if !data.renderStatusInInventory>
-					@Override public boolean isVisibleInInventory(MobEffectInstance effect) {
-						return false;
-					}
-		
-					@Override public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-						return false;
-					}
-				</#if>
-	
-				<#if !data.renderStatusInHUD>
-					@Override public boolean isVisibleInGui(MobEffectInstance effect) {
-						return false;
-					}
-				</#if>
-			});
+	<#if hasProcedure(data.onMobHurt)>
+		@Override public void onMobHurt(LivingEntity entity, int amplifier, DamageSource damagesource, float damage) {
+			<@procedureCode data.onMobHurt, {
+				"x": "entity.getX()",
+				"y": "entity.getY()",
+				"z": "entity.getZ()",
+				"world": "entity.level()",
+				"entity": "entity",
+				"amplifier": "amplifier",
+				"damagesource": "damagesource",
+				"damage": "damage"
+			}/>
 		}
+	</#if>
+
+	<#if hasProcedure(data.onMobRemoved)>
+		@Override public void onMobRemoved(LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
+			if (reason == Entity.RemovalReason.KILLED) {
+				<@procedureCode data.onMobRemoved, {
+					"x": "entity.getX()",
+					"y": "entity.getY()",
+					"z": "entity.getZ()",
+					"world": "entity.level()",
+					"entity": "entity",
+					"amplifier": "amplifier"
+				}/>
+			}
+		}
+	</#if>
+
+	<#if data.hasCustomRenderer()>
+	@Override public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
+		consumer.accept(new IClientMobEffectExtensions() {
+			<#if !data.renderStatusInInventory>
+			@Override public boolean isVisibleInInventory(MobEffectInstance effect) {
+				return false;
+			}
+
+			@Override public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
+				return false;
+			}
+			</#if>
+
+			<#if !data.renderStatusInHUD>
+			@Override public boolean isVisibleInGui(MobEffectInstance effect) {
+				return false;
+			}
+			</#if>
+		}, ${JavaModName}MobEffects.${REGISTRYNAME}.get());
+	}
 	</#if>
 }
 </#compress>
