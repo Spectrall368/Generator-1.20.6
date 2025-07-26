@@ -354,7 +354,10 @@ public class ${name}Item extends <#if data.hasBannerPatterns()>BannerPattern<#el
 			projectile.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 		} else {
 			if (stack.isDamageableItem()) {
-					stack.hurtAndBreak(1, world.getRandom(), player, _stkprov -> {});
+					stack.hurtAndBreak(1, world.getRandom(), player, () -> {
+					    stack.shrink(1);
+					    stack.setDamageValue(0);
+					});
 			} else {
 				stack.shrink(1);
 			}
