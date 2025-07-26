@@ -76,6 +76,9 @@ public class ${name}Item extends <#if data.hasBannerPatterns()>BannerPattern<#el
 							AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
 					.build())
 				</#if>
+				<#if data.stayInGridWhenCrafting && (!data.recipeRemainder?? || data.recipeRemainder.isEmpty()) && data.damageCount != 0>
+				.setNoRepair()
+				</#if>
 		<#if !data.hasBannerPatterns() && data.isMusicDisc>
  		,${data.musicDiscLengthInTicks});
  		<#else>
@@ -127,20 +130,10 @@ public class ${name}Item extends <#if data.hasBannerPatterns()>BannerPattern<#el
 				}
 				return retval;
 			}
-
-			@Override public boolean isRepairable(ItemStack itemstack) {
-				return false;
-			}
 		<#else>
 			@Override public ItemStack getCraftingRemainingItem(ItemStack itemstack) {
 				return new ItemStack(this);
 			}
-
-			<#if data.damageCount != 0>
-			@Override public boolean isRepairable(ItemStack itemstack) {
-				return false;
-			}
-			</#if>
 		</#if>
 	</#if>
 

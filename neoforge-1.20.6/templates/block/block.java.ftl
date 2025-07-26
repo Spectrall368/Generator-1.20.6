@@ -104,7 +104,7 @@ public class ${name}Block extends
 	<#if data.hasGravity>
 	public static final MapCodec<${name}Block> CODEC = simpleCodec(properties -> new ${name}Block());
 
-	public MapCodec<${name}Block> codec() {
+	@Override public MapCodec<${name}Block> codec() {
 		return CODEC;
 	}
 	</#if>
@@ -493,7 +493,7 @@ public class ${name}Block extends
 
 	<#if data.plantsGrowOn>
 	@Override
-	public TriState canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction direction, BlockState plant) {
+	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction direction, IPlantable plant) {
 		return true;
 	}
 	</#if>
