@@ -361,8 +361,7 @@ public class ${name}Item extends <#if data.hasBannerPatterns()>BannerPattern<#el
 			projectile.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 		} else {
 			if (stack.isDamageableItem()) {
-				if (world instanceof ServerLevel serverLevel)
-					stack.hurtAndBreak(1, serverLevel, player, _stkprov -> {});
+					stack.hurtAndBreak(1, world.getRandom(), player, _stkprov -> {});
 			} else {
 				stack.shrink(1);
 			}

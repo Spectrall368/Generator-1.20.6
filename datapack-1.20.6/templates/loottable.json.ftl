@@ -87,6 +87,7 @@
                   <#if entry.minEnchantmentLevel != 0 || entry.maxEnchantmentLevel != 0>
                   ,{
                     "function": "minecraft:enchant_with_levels",
+                    "treasure": true,
                     "levels": {
                       "min": ${entry.minEnchantmentLevel},
                       "max": ${entry.maxEnchantmentLevel}

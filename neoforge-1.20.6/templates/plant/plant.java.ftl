@@ -249,29 +249,12 @@ public class ${name}Block extends ${getPlantClass(data.plantType)}Block
 					return this.mayPlaceOn(groundState, worldIn, blockpos)
 			</#if>;
 		}
-	<#elseif !(data.growapableSpawnType == "Plains" && (data.plantType == "normal" || data.plantType == "sapling"))><#-- If no placingCondition or canBePlacedOn block list is specified, we emulate plant type placement logic -->
-		private boolean canPlantTypeSurvive(BlockState state, LevelReader world, BlockPos pos) {
-			${generator.map(data.growapableSpawnType, "planttypes")}
-		}
+	</#if>
 
-		@Override public boolean canSurvive(BlockState blockstate, LevelReader world, BlockPos pos) {
-			BlockPos posbelow = pos.below();
-			BlockState statebelow = world.getBlockState(posbelow);
-			<#if data.plantType == "normal" || data.plantType == "sapling"><#-- emulate BushBlock and SaplingBlock plant type logic -->
-			if (blockstate.getBlock() == this) return this.canPlantTypeSurvive(statebelow, world, posbelow);
-			return this.mayPlaceOn(statebelow, world, posbelow);
-			<#elseif data.plantType == "growapable"><#-- emulate SugarCaneBlock plant type logic -->
-			if (this.canPlantTypeSurvive(statebelow, world, posbelow)) return true;
-			return super.canSurvive(blockstate, world, pos);
-			<#else><#-- emulate DoublePlantBlock plant type logic -->
-			if (blockstate.getValue(HALF) != DoubleBlockHalf.UPPER) {
-				if (blockstate.getBlock() == this) return this.canPlantTypeSurvive(statebelow, world, posbelow);
-				return this.mayPlaceOn(statebelow, world, posbelow);
-			} else {
-				return statebelow.is(this) && statebelow.getValue(HALF) == DoubleBlockHalf.LOWER;
-			}
-			</#if>
-		}
+	<#if !(data.growapableSpawnType == "Plains" && (data.plantType == "normal" || data.plantType == "sapling"))>
+	@Override public PlantType getPlantType(BlockGetter world, BlockPos pos) {
+		return PlantType.${generator.map(data.growapableSpawnType, "planttypes")};
+	}
 	</#if>
 
 	<@onBlockAdded data.onBlockAdded, false, 0/>
