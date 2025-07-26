@@ -86,11 +86,9 @@ public class ${name}Item extends ${data.toolType?replace("Spade", "Shovel")?repl
 	</#if>
 
 	public ${name}Item () {
-		super(
-			<#if data.toolType == "Pickaxe" || data.toolType == "Axe" || data.toolType == "Sword" || data.toolType == "Spade" || data.toolType == "Hoe" || data.toolType == "MultiTool">
+		super(<#if data.toolType == "Pickaxe" || data.toolType == "Axe" || data.toolType == "Sword" || data.toolType == "Spade" || data.toolType == "Hoe" || data.toolType == "MultiTool">
 			TOOL_TIER,
-			</#if>
-			new Item.Properties()
+			</#if>new Item.Properties()
 				<#if (data.usageCount != 0) && (data.toolType == "Shears" || data.toolType == "Shield")>
 				.durability(${data.usageCount})
 				</#if>
@@ -108,6 +106,9 @@ public class ${name}Item extends ${data.toolType?replace("Spade", "Shovel")?repl
 				</#if>
 				<#if data.immuneToFire>
 				.fireResistant()
+				</#if>
+				<#if data.stayInGridWhenCrafting && data.usageCount != 0>
+				.setNoRepair()
 				</#if>
 		);
 	}
@@ -200,6 +201,9 @@ public class ${name}Item extends Item {
 			<#if data.immuneToFire>
 			.fireResistant()
 			</#if>
+			<#if data.stayInGridWhenCrafting && data.usageCount != 0>
+			.setNoRepair()
+			</#if>
 			.attributes(ItemAttributeModifiers.builder()
 				.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", ${data.damageVsEntity - 1},
 						AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
@@ -235,6 +239,9 @@ public class ${name}Item extends FishingRodItem {
 			</#if>
 			<#if data.immuneToFire>
 			.fireResistant()
+			</#if>
+			<#if data.stayInGridWhenCrafting && data.usageCount != 0>
+			.setNoRepair()
 			</#if>
 		);
 	}
@@ -290,20 +297,10 @@ public class ${name}Item extends FishingRodItem {
 				}
 				return retval;
 			}
-
-			@Override public boolean isRepairable(ItemStack itemstack) {
-				return false;
-			}
 		<#else>
 			@Override public ItemStack getCraftingRemainingItem(ItemStack itemstack) {
 				return new ItemStack(this);
 			}
-
-			<#if data.usageCount != 0>
-				@Override public boolean isRepairable(ItemStack itemstack) {
-					return false;
-				}
-			</#if>
 		</#if>
 	</#if>
 
