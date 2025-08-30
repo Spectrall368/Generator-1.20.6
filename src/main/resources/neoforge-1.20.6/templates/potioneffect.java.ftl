@@ -43,7 +43,7 @@ public class ${name}MobEffect extends <#if data.isInstant>Instantenous</#if>MobE
 		</#if>
 		<#list data.modifiers as modifier>
 		this.addAttributeModifier(${modifier.attribute},
-				new ResourceLocation(${JavaModName}.MODID, "effect.${registryname}_${modifier?index}"),
+				"${w.getUUID(registryname + "_" + modifier?index)}",
 				${modifier.amount}, AttributeModifier.Operation.${modifier.operation});
 		</#list>
 	}
@@ -160,7 +160,7 @@ public class ${name}MobEffect extends <#if data.isInstant>Instantenous</#if>MobE
 				return false;
 			}
 			</#if>
-		}, ${JavaModName}MobEffects.${REGISTRYNAME}.get());
+		});
 	}
 	</#if>
 }
