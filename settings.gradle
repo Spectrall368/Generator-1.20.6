@@ -1,0 +1,4 @@
+rootProject.name = 'generator-1.20.6'
+
+include ":MCreator"
+project(":MCreator").projectDir = file(mcreator_path)
