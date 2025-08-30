@@ -3,7 +3,7 @@
 
 MCreator generator plugin for NeoForge 1.20.6.
 
-<img src="https://github.com/Spectrall368/Generator-1.20.6/blob/2025.2/neo_logo.png" width="200" height="200"/>
+<img src="https://github.com/Spectrall368/Generator-1.20.6/blob/2025.2/neo_logo.png" width="250" height="250" alt="Plugin logo"/>
 
 ## How to install
 
