@@ -22,6 +22,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Checkout MCreator repository
+        uses: actions/checkout@v4
+        with:
+          repository: MCreator/MCreator
+          ref: 2025.2.28610
+          path: mcreator
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -41,7 +47,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
       - name: Run MCreator Test With Plugin
-        run: xvfb-run -a ./gradlew test --project-prop mcreator_path=2025.2.28610
+        run: xvfb-run -a ./gradlew test --project-prop mcreator_path=${{ github.workspace }}/mcreator
       - name: Test Javadoc Generation
         run: ./gradlew javadoc
       - name: Publish Test Report
