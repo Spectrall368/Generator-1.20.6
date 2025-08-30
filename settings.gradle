@@ -1,13 +1,7 @@
 rootProject.name = 'generator-' + version
 
-def envPath = System.getenv('mcreator_path')
-def propPath = hasProperty('mcreator_path') ? mcreator_path : findProperty('mcreator_path')
-def mcreator_path = envPath ?: propPath
-
-if (!mcreator_path) {
-    throw new GradleException("mcreator_path is not set! Pass it as an environment variable or in gradle.properties.")
-}
-
+mcreator_path = System.getenv("mcreator_path") ?: "./mcreator"
+println "Using mcreator_path = ${mcreator_path}"
 
 include ":MCreator"
 project(":MCreator").projectDir = file(mcreator_path)
