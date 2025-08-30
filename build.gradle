@@ -2,8 +2,6 @@ plugins {
     id "java"
 }
 
-def mcreator_path = System.getenv("MCREATOR_PATH") ?: "./mcreator"
-
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 tasks.named('processResources') {
