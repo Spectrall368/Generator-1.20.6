@@ -1,9 +1,6 @@
 rootProject.name = 'generator-' + version
 
-def mcreatorPathEnv = System.getenv("MCREATOR_PATH")
-def defaultPath = "./mcreator"
-mcreator_path = mcreatorPathEnv ?: defaultPath
-
+def mcreator_path = System.getenv("MCREATOR_PATH") ?: "./mcreator"
 println "Using mcreator_path = ${mcreator_path}"
 
 include ":MCreator"
