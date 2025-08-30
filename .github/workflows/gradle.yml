@@ -35,4 +35,4 @@ jobs:
       - name: Run MCreator Test With Plugin
         env:
           mcreator_path: ${{ github.workspace }}/mcreator
-        run: ./gradlew runMCreatorWithPlugin
+        run: ./gradlew test
