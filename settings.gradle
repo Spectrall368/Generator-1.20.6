@@ -1,4 +1,6 @@
 rootProject.name = 'generator-' + version
 
+def mcreator_path = hasProperty('mcreator_path') ? mcreator_path : findProperty('mcreator_path')
+
 include ":MCreator"
 project(":MCreator").projectDir = file(mcreator_path)
