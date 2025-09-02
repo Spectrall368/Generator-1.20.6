@@ -4,7 +4,7 @@
   "info": {
     "name": "NeoForge ${version} Generator",
     "version": "${pluginVersion}",
-    "description": "This plugin includes a mod, datapack and resourcepack generator for ${version}",
+    "description": "This plugin includes a mod, datapack and resourcepack generator for NeoForge ${version}",
     "author": "_Spectrall",
     "dependencies":  [],
     "updateJSONURL": "https://raw.githubusercontent.com/Spectrall368/Generator-${version}/${mcreatorVersionShort}/update.json",
