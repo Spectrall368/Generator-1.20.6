@@ -94,7 +94,7 @@ package ${package}.client.renderer.item;
 		else
 		</#if>
 		model.setupAnim(null, 0, 0, (System.currentTimeMillis() - start) / 50.0f, 0, 0);
-		model.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay);
+		model.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, 1, 1, 1, 1);
 		poseStack.popPose();
 	}
 
