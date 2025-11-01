@@ -501,11 +501,11 @@ public class ${name}Block extends
 	</#if>
 
 	<#if data.xpAmountMax != 0>
-	@Override public int getExpDrop(BlockState state, LevelAccessor level, BlockPos pos, BlockEntity blockEntity, Entity breaker, ItemStack tool) {
+	@Override public int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
 		<#if data.xpAmountMin == data.xpAmountMax>
 		return ${data.xpAmountMin};
 		<#else>
-		return Mth.randomBetweenInclusive(level.getRandom(), ${data.xpAmountMin}, ${data.xpAmountMax});
+		return Mth.randomBetweenInclusive(randomSource, ${data.xpAmountMin}, ${data.xpAmountMax});
 		</#if>
 	}
 	</#if>
