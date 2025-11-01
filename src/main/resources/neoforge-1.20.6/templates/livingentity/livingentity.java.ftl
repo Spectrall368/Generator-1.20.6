@@ -172,7 +172,7 @@ public class ${name}Entity extends ${extendsClass} <#if interfaces?size gt 0>imp
 	@Override protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
 		<#list data.entityDataEntries as entry>
-			builder.define(DATA_${entry.property().getName()}, ${entry.value()?is_string?then("\"" + entry.value() + "\"", entry.value())});
+			builder.define(DATA_${entry.property().getName()}, ${entry.value()?is_string?then("\"" + JavaConventions.escapeStringForJava(entry.value()) + "\"", entry.value())});
 		</#list>
 	}
 	</#if>
@@ -981,7 +981,7 @@ public class ${name}Entity extends ${extendsClass} <#if interfaces?size gt 0>imp
 		</#if>
 
 		<#if data.mobBehaviourType == "Raider">
-		Raid.RaiderType.create("${registryname}", ${JavaModName}Entities.${data.getModElement().getRegistryNameUpper()}.get(), new int[]{0, ${data.raidSpawnsCount[0]}, ${data.raidSpawnsCount[1]}, ${data.raidSpawnsCount[2]}, ${data.raidSpawnsCount[3]}, ${data.raidSpawnsCount[4]}, ${data.raidSpawnsCount[5]}, ${data.raidSpawnsCount[6]}});
+		Raid.RaiderType.create("${registryname}", ${JavaModName}Entities.${REGISTRYNAME}.get(), new int[]{0, ${data.raidSpawnsCount[0]}, ${data.raidSpawnsCount[1]}, ${data.raidSpawnsCount[2]}, ${data.raidSpawnsCount[3]}, ${data.raidSpawnsCount[4]}, ${data.raidSpawnsCount[5]}, ${data.raidSpawnsCount[6]}});
 		</#if>
 	}
 
@@ -1034,7 +1034,7 @@ public class ${name}Entity extends ${extendsClass} <#if interfaces?size gt 0>imp
 
 		<#if data.vibrationalEvents?has_content>
 		@Override public TagKey<GameEvent> getListenableEvents() {
-			return TagKey.create(Registries.GAME_EVENT, new ResourceLocation("${data.getModElement().getRegistryName()}_can_listen"));
+			return TagKey.create(Registries.GAME_EVENT, new ResourceLocation("${registryname}_can_listen"));
 		}
 		</#if>
 
