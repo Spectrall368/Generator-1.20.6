@@ -32,82 +32,84 @@ import net.minecraft.nbt.Tag;
 	}
 
 	<#if w.hasVariablesOfScope("PLAYER_LIFETIME") || w.hasVariablesOfScope("PLAYER_PERSISTENT")>
-	@SubscribeEvent public static void onPlayerLoggedInSyncPlayerVariables(PlayerEvent.PlayerLoggedInEvent event) {
-		if (event.getEntity() instanceof ServerPlayer player)
-			PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
-	}
+    @EventBusSubscriber public static class EventBusVariableHandlers {
+        @SubscribeEvent public static void onPlayerLoggedInSyncPlayerVariables(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player)
+                PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
+        }
 
-	@SubscribeEvent public static void onPlayerRespawnedSyncPlayerVariables(PlayerEvent.PlayerRespawnEvent event) {
-		if (event.getEntity() instanceof ServerPlayer player)
-			PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
-	}
+        @SubscribeEvent public static void onPlayerRespawnedSyncPlayerVariables(PlayerEvent.PlayerRespawnEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player)
+                PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
+        }
 
-	@SubscribeEvent public static void onPlayerChangedDimensionSyncPlayerVariables(PlayerEvent.PlayerChangedDimensionEvent event) {
-		if (event.getEntity() instanceof ServerPlayer player)
-			PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
-	}
+        @SubscribeEvent public static void onPlayerChangedDimensionSyncPlayerVariables(PlayerEvent.PlayerChangedDimensionEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player)
+                PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
+        }
 
-	@SubscribeEvent public static void onPlayerTickUpdateSyncPlayerVariables(PlayerTickEvent.Post event) {
-		if (event.getEntity() instanceof ServerPlayer player && player.getData(PLAYER_VARIABLES)._syncDirty) {
-			PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
-			player.getData(PLAYER_VARIABLES)._syncDirty = false;
-		}
-	}
+        @SubscribeEvent public static void onPlayerTickUpdateSyncPlayerVariables(PlayerTickEvent.Post event) {
+            if (event.getEntity() instanceof ServerPlayer player && player.getData(PLAYER_VARIABLES)._syncDirty) {
+                PacketDistributor.sendToPlayer(player, new PlayerVariablesSyncMessage(player.getData(PLAYER_VARIABLES)));
+                player.getData(PLAYER_VARIABLES)._syncDirty = false;
+            }
+        }
 
-	@SubscribeEvent public static void clonePlayer(PlayerEvent.Clone event) {
-		PlayerVariables original = event.getOriginal().getData(PLAYER_VARIABLES);
-		PlayerVariables clone = new PlayerVariables();
-		<#list variables as var>
-			<#if var.getScope().name() == "PLAYER_PERSISTENT">
-			clone.${var.getName()} = original.${var.getName()};
-			</#if>
-		</#list>
-		if(!event.isWasDeath()) {
-			<#list variables as var>
-				<#if var.getScope().name() == "PLAYER_LIFETIME">
-				clone.${var.getName()} = original.${var.getName()};
-				</#if>
-			</#list>
-		}
-		event.getEntity().setData(PLAYER_VARIABLES, clone);
-	}
-	</#if>
+        @SubscribeEvent public static void clonePlayer(PlayerEvent.Clone event) {
+            PlayerVariables original = event.getOriginal().getData(PLAYER_VARIABLES);
+            PlayerVariables clone = new PlayerVariables();
+            <#list variables as var>
+                <#if var.getScope().name() == "PLAYER_PERSISTENT">
+                clone.${var.getName()} = original.${var.getName()};
+                </#if>
+            </#list>
+            if(!event.isWasDeath()) {
+                <#list variables as var>
+                    <#if var.getScope().name() == "PLAYER_LIFETIME">
+                    clone.${var.getName()} = original.${var.getName()};
+                    </#if>
+                </#list>
+            }
+            event.getEntity().setData(PLAYER_VARIABLES, clone);
+        }
+        </#if>
 
-	<#if w.hasVariablesOfScope("GLOBAL_WORLD") || w.hasVariablesOfScope("GLOBAL_MAP")>
-	@SubscribeEvent public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		if (event.getEntity() instanceof ServerPlayer player) {
-			SavedData mapdata = MapVariables.get(event.getEntity().level());
-			SavedData worlddata = WorldVariables.get(event.getEntity().level());
-			if(mapdata != null)
-				PacketDistributor.sendToPlayer(player, new SavedDataSyncMessage(0, mapdata));
-			if(worlddata != null)
-				PacketDistributor.sendToPlayer(player, new SavedDataSyncMessage(1, worlddata));
-		}
-	}
+        <#if w.hasVariablesOfScope("GLOBAL_WORLD") || w.hasVariablesOfScope("GLOBAL_MAP")>
+        @SubscribeEvent public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                SavedData mapdata = MapVariables.get(event.getEntity().level());
+                SavedData worlddata = WorldVariables.get(event.getEntity().level());
+                if(mapdata != null)
+                    PacketDistributor.sendToPlayer(player, new SavedDataSyncMessage(0, mapdata));
+                if(worlddata != null)
+                    PacketDistributor.sendToPlayer(player, new SavedDataSyncMessage(1, worlddata));
+            }
+        }
 
-	@SubscribeEvent public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-		if (event.getEntity() instanceof ServerPlayer player) {
-			SavedData worlddata = WorldVariables.get(event.getEntity().level());
-			if(worlddata != null)
-				PacketDistributor.sendToPlayer(player, new SavedDataSyncMessage(1, worlddata));
-		}
-	}
+        @SubscribeEvent public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                SavedData worlddata = WorldVariables.get(event.getEntity().level());
+                if(worlddata != null)
+                    PacketDistributor.sendToPlayer(player, new SavedDataSyncMessage(1, worlddata));
+            }
+        }
 
-	@SubscribeEvent public static void onWorldTick(LevelTickEvent.Post event) {
-		if (event.getLevel() instanceof ServerLevel level) {
-			WorldVariables worldVariables = WorldVariables.get(level);
-			if (worldVariables._syncDirty) {
-				PacketDistributor.sendToPlayersInDimension(level, new SavedDataSyncMessage(1, worldVariables));
-				worldVariables._syncDirty = false;
-			}
+        @SubscribeEvent public static void onWorldTick(LevelTickEvent.Post event) {
+            if (event.getLevel() instanceof ServerLevel level) {
+                WorldVariables worldVariables = WorldVariables.get(level);
+                if (worldVariables._syncDirty) {
+                    PacketDistributor.sendToPlayersInDimension(level, new SavedDataSyncMessage(1, worldVariables));
+                    worldVariables._syncDirty = false;
+                }
 
-			MapVariables mapVariables = MapVariables.get(level);
-			if (mapVariables._syncDirty) {
-				PacketDistributor.sendToAllPlayers(new SavedDataSyncMessage(0, mapVariables));
-				mapVariables._syncDirty = false;
-			}
-		}
-	}
+                MapVariables mapVariables = MapVariables.get(level);
+                if (mapVariables._syncDirty) {
+                    PacketDistributor.sendToAllPlayers(new SavedDataSyncMessage(0, mapVariables));
+                    mapVariables._syncDirty = false;
+                }
+            }
+        }
+    }
 	</#if>
 
 	<#if w.hasVariablesOfScope("GLOBAL_WORLD") || w.hasVariablesOfScope("GLOBAL_MAP")>
