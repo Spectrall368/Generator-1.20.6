@@ -112,6 +112,7 @@ import net.minecraft.nbt.Tag;
         }
 		</#if>
 	}
+	</#if>
 
 	<#if w.hasVariablesOfScope("GLOBAL_WORLD") || w.hasVariablesOfScope("GLOBAL_MAP")>
 	public static class WorldVariables extends SavedData {
