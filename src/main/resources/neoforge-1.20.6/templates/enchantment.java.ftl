@@ -58,7 +58,7 @@ public class ${name}Enchantment extends Enchantment {
 			Enchantment.dynamicCost(1, 10), <#-- minCost -->
 			Enchantment.dynamicCost(6, 10), <#-- maxCost -->
 			${data.anvilCost}, <#-- anvilCost -->
-			${generator.map(data.supportedSlots, "equipmentslots")} <#-- slots -->
+			${generator.map(data.supportedSlots, "equipmentslots", 2)} <#-- slots -->
 		));
 	}
 
