@@ -97,7 +97,7 @@ import net.minecraft.client.model.Model;
                         <#if data.helmetTranslucency>
                         {
                             @Override
-                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float r float g, float b, float alpha) {
                                 VertexConsumer translucentTexture = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(
                                     <#if data.helmetModelTexture?has_content && data.helmetModelTexture != "From armor">
                                         ${JavaModName}Items.${REGISTRYNAME}_HELMET.get().getArmorTexture(null, null, null, null, false)
@@ -105,7 +105,7 @@ import net.minecraft.client.model.Model;
                                         new ResourceLocation("${modid}:textures/models/armor/${data.armorTextureFile}_layer_1.png")
                                     </#if>
                                 ));
-                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, color);
+                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, r, g, b, alpha);
                             }
                         }
                         </#if>;
@@ -163,7 +163,7 @@ import net.minecraft.client.model.Model;
                         <#if data.bodyTranslucency>
                         {
                             @Override
-                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float r float g, float b, float alpha) {
                                 VertexConsumer translucentTexture = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(
                                     <#if data.bodyModelTexture?has_content && data.bodyModelTexture != "From armor">
                                         ${JavaModName}Items.${REGISTRYNAME}_CHESTPLATE.get().getArmorTexture(null, null, null, null, false)
@@ -171,7 +171,7 @@ import net.minecraft.client.model.Model;
                                         new ResourceLocation("${modid}:textures/models/armor/${data.armorTextureFile}_layer_1.png")
                                     </#if>
                                 ));
-                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, color);
+                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, r, g, b, alpha);
                             }
                         }
                         </#if>;
@@ -229,7 +229,7 @@ import net.minecraft.client.model.Model;
                         <#if data.leggingsTranslucency>
                         {
                             @Override
-                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float r float g, float b, float alpha) {
                                 VertexConsumer translucentTexture = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(
                                     <#if data.leggingsModelTexture?has_content && data.leggingsModelTexture != "From armor">
                                         ${JavaModName}Items.${REGISTRYNAME}_LEGGINGS.get().getArmorTexture(null, null, null, null, false)
@@ -237,7 +237,7 @@ import net.minecraft.client.model.Model;
                                         new ResourceLocation("${modid}:textures/models/armor/${data.armorTextureFile}_layer_2.png")
                                     </#if>
                                 ));
-                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, color);
+                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, r, g, b, alpha);
                             }
                         }
                         </#if>;
@@ -295,7 +295,7 @@ import net.minecraft.client.model.Model;
                         <#if data.bootsTranslucency>
                         {
                             @Override
-                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+                            public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float r float g, float b, float alpha) {
                                 VertexConsumer translucentTexture = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(
                                     <#if data.bootsModelTexture?has_content && data.bootsModelTexture != "From armor">
                                         ${JavaModName}Items.${REGISTRYNAME}_BOOTS.get().getArmorTexture(null, null, null, null, false)
@@ -303,7 +303,7 @@ import net.minecraft.client.model.Model;
                                         new ResourceLocation("${modid}:textures/models/armor/${data.armorTextureFile}_layer_1.png")
                                     </#if>
                                 ));
-                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, color);
+                                super.renderToBuffer(poseStack, translucentTexture, packedLight, packedOverlay, r, g, b, alpha);
                             }
                         }
                         </#if>;
