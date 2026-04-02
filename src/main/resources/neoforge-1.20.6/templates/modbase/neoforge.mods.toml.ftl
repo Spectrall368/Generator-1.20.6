@@ -57,7 +57,7 @@ displayTest="IGNORE_SERVER_VERSION"
 [[dependencies.${settings.getModID()}]]
     modId="${e}"
     type="required"
-    versionRange="[0,)"
+    versionRange="${settings.getVersionRange(e)}"
     ordering="NONE"
     side="BOTH"
 </#list>
@@ -66,7 +66,7 @@ displayTest="IGNORE_SERVER_VERSION"
 [[dependencies.${settings.getModID()}]]
     modId="${e}"
     type="optional"
-    versionRange="[0,)"
+    versionRange="${settings.getVersionRange(e)}"
     ordering="NONE"
     side="BOTH"
 </#list>

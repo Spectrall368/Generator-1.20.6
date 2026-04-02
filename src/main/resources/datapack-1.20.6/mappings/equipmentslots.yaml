@@ -1,0 +1,33 @@
+_default:
+  - EquipmentSlot.values()
+  - any
+any:
+  - EquipmentSlot.values()
+  - any
+mainhand:
+  - EquipmentSlot.MAINHAND
+  - mainhand
+offhand:
+  - EquipmentSlot.OFFHAND
+  - offhand
+hand:
+  - "EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND"
+  - hand
+feet:
+  - EquipmentSlot.FEET
+  - feet
+legs:
+  - EquipmentSlot.LEGS
+  - legs
+chest:
+  - EquipmentSlot.CHEST
+  - chest
+head:
+  - EquipmentSlot.HEAD
+  - head
+armor:
+  - "EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET"
+  - armor
+body:
+  - EquipmentSlot.CHEST
+  - body

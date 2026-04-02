@@ -89,20 +89,22 @@ public class ${name}Item extends ${data.toolType?replace("Spade", "Shovel")?repl
 		super(<#if data.toolType == "Pickaxe" || data.toolType == "Axe" || data.toolType == "Sword" || data.toolType == "Spade" || data.toolType == "Hoe" || data.toolType == "MultiTool">
 			TOOL_TIER,
 			</#if>new Item.Properties()
-				<#if (data.usageCount != 0) && (data.toolType == "Shears" || data.toolType == "Shield")>
-				.durability(${data.usageCount})
+				<#if data.toolType == "Shears" || data.toolType == "Shield">
+					<#if data.usageCount != 0>
+					.durability(${data.usageCount})
+					<#else>
+					.stacksTo(1)
+					</#if>
 				</#if>
-				<#if data.toolType == "MultiTool">
-				.attributes(ItemAttributeModifiers.builder()
-						.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", ${data.damageVsEntity - 1},
-								AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-						.add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", ${data.attackSpeed - 4},
-								AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-						.build())
+				<#if data.toolType == "MultiTool" || data.attributeModifiers?size gt 0>
+				.attributes(<@itemAttributeModifiers (data.toolType != "Shield" && data.toolType != "Shears")/>)
 				<#elseif data.toolType == "Sword">
 				.attributes(SwordItem.createAttributes(TOOL_TIER, ${data.damageVsEntity - 1}f, ${data.attackSpeed - 4}f))
 				<#elseif data.toolType == "Pickaxe" || data.toolType == "Axe" || data.toolType == "Spade" || data.toolType == "Hoe" || data.toolType == "MultiTool">
 				.attributes(DiggerItem.createAttributes(TOOL_TIER, ${data.damageVsEntity - 1}f, ${data.attackSpeed - 4}f))
+				</#if>
+				<#if data.rarity != "COMMON">
+				.rarity(Rarity.${data.rarity})
 				</#if>
 				<#if data.immuneToFire>
 				.fireResistant()
@@ -128,7 +130,7 @@ public class ${name}Item extends ${data.toolType?replace("Spade", "Shovel")?repl
 	}
 	</#if>
 
-	<#if data.toolType == "Shield" && data.repairItems?has_content>
+	<#if (data.toolType == "Shield" || data.toolType == "Shears") && data.repairItems?has_content>
 	@Override public boolean isValidRepairItem(ItemStack itemstack, ItemStack repairitem) {
 		return ${mappedMCItemsToIngredient(data.repairItems)}.test(repairitem);
 	}
@@ -197,6 +199,11 @@ public class ${name}Item extends Item {
 		super(new Item.Properties()
 			<#if data.usageCount != 0>
 			.durability(${data.usageCount})
+			<#else>
+			.stacksTo(1)
+			</#if>
+			<#if data.rarity != "COMMON">
+			.rarity(Rarity.${data.rarity})
 			</#if>
 			<#if data.immuneToFire>
 			.fireResistant()
@@ -204,12 +211,7 @@ public class ${name}Item extends Item {
 			<#if data.stayInGridWhenCrafting && data.usageCount != 0>
 			.setNoRepair()
 			</#if>
-			.attributes(ItemAttributeModifiers.builder()
-				.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", ${data.damageVsEntity - 1},
-						AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-				.add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", ${data.attackSpeed - 4},
-						AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-				.build())
+			.attributes(<@itemAttributeModifiers true/>)
 		);
 	}
 
@@ -227,6 +229,12 @@ public class ${name}Item extends Item {
 		return ${data.enchantability};
 	}
 
+	<#if data.repairItems?has_content>
+		@Override public boolean isValidRepairItem(ItemStack itemstack, ItemStack repairitem) {
+			return ${mappedMCItemsToIngredient(data.repairItems)}.test(repairitem);
+		}
+	</#if>
+
 	<@commonMethods/>
 }
 <#elseif data.toolType=="Fishing rod">
@@ -236,12 +244,20 @@ public class ${name}Item extends FishingRodItem {
 		super(new Item.Properties()
 			<#if data.usageCount != 0>
 			.durability(${data.usageCount})
+			<#else>
+			.stacksTo(1)
+			</#if>
+			<#if data.rarity != "COMMON">
+			.rarity(Rarity.${data.rarity})
 			</#if>
 			<#if data.immuneToFire>
 			.fireResistant()
 			</#if>
 			<#if data.stayInGridWhenCrafting && data.usageCount != 0>
 			.setNoRepair()
+			</#if>
+			<#if data.attributeModifiers?size gt 0>
+			.attributes(<@itemAttributeModifiers/>)
 			</#if>
 		);
 	}
@@ -282,6 +298,20 @@ public class ${name}Item extends FishingRodItem {
 </#if>
 </@javacompress>
 
+<#macro itemAttributeModifiers includeMeleeAttributes=false>
+	ItemAttributeModifiers.builder()
+	<#if includeMeleeAttributes>
+	.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, ${data.damageVsEntity - 1}, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+	.add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, ${data.attackSpeed - 4}, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+	</#if>
+	<#list data.attributeModifiers as modifier>
+	.add(${modifier.attribute}, new AttributeModifier(
+			ResourceLocation.fromNamespaceAndPath(${JavaModName}.MODID, "${registryname}_${modifier?index}"),
+			${modifier.amount}, AttributeModifier.Operation.${modifier.operation}), ${generator.map(modifier.equipmentSlot, "equipmentslots")})
+	</#list>
+	.build()
+</#macro>
+
 <#macro commonMethods>
 	<#if data.stayInGridWhenCrafting>
 		@Override public boolean hasCraftingRemainingItem(ItemStack stack) {
@@ -313,6 +343,10 @@ public class ${name}Item extends FishingRodItem {
 	<@onEntitySwing data.onEntitySwing/>
 
 	<@onItemTick data.onItemInUseTick, data.onItemInInventoryTick/>
+
+	<@onDroppedByPlayer data.onDroppedByPlayer/>
+
+	<@onItemEntityDestroyed data.onItemEntityDestroyed/>
 
 	<@hasGlow data.glowCondition/>
 

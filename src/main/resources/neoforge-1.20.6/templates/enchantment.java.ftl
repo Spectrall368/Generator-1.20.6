@@ -34,15 +34,6 @@
 <#assign supportedItems = w.filterBrokenReferences(data.supportedItems)>
 <#assign incompatibleEnchantments = w.filterBrokenReferences(data.incompatibleEnchantments)>
 
-<#macro slotsCode slots>
-	<#if slots == "any">EquipmentSlot.values()
-	<#elseif slots == "hand">new EquipmentSlot[] { EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND }
-	<#elseif slots == "armor">new EquipmentSlot[] { EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET }
-	<#elseif slots == "body">new EquipmentSlot[] { EquipmentSlot.CHEST }
-	<#else>new EquipmentSlot[] { EquipmentSlot.${slots?upper_case} }
-	</#if>
-</#macro>
-
 <#macro supportedItemsCode supportedItems slots>
 	<#if supportedItems?size == 1 && supportedItems?first?starts_with("TAG:")>
 		ItemTags.create(new ResourceLocation("${supportedItems?first?replace("TAG:", "")}"))
@@ -61,13 +52,13 @@ public class ${name}Enchantment extends Enchantment {
 
 	public ${name}Enchantment() {
 		super(Enchantment.definition(
-			<@supportedItemsCode supportedItems data.supportedSlots/>, <#-- supportedItems -->
+			<@supportedItemsCode supportedItems generator.map(data.supportedSlots, "equipmentslots", 1)/>, <#-- supportedItems -->
 			${data.weight}, <#-- weight -->
 			${data.maxLevel}, <#-- maxLevel -->
 			Enchantment.dynamicCost(1, 10), <#-- minCost -->
 			Enchantment.dynamicCost(6, 10), <#-- maxCost -->
 			${data.anvilCost}, <#-- anvilCost -->
-			<@slotsCode data.supportedSlots/> <#-- slots -->
+			${generator.map(data.supportedSlots, "equipmentslots")} <#-- slots -->
 		));
 	}
 
