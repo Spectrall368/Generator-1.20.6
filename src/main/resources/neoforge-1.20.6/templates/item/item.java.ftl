@@ -78,7 +78,7 @@ public class ${name}Item extends <#if data.hasBannerPatterns()>BannerPattern<#el
 					</#if>
 					<#list data.attributeModifiers as modifier>
 					.add(${modifier.attribute}, new AttributeModifier(
-							new ResourceLocation(${JavaModName}.MODID, "${registryname}_${modifier?index}"),
+							"${w.getUUID(registryname + "_" + modifier?index)}",
 							${modifier.amount}, AttributeModifier.Operation.${modifier.operation}), ${generator.map(modifier.equipmentSlot, "equipmentslots")})
 					</#list>
 					.build())
