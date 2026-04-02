@@ -131,6 +131,35 @@ package ${package}.client.particle;
 		<#-- render a flipped face because by default only a single side renders this makes particle visible from all angles -->
 		this.renderRotatedQuad(buffer, camera, flippedTilt, partialTicks);
 	}
+
+    private void renderRotatedQuad(VertexConsumer buffer, Camera camera, Quaternionf rotation, float partialTicks) {
+        Vec3 camPos = camera.getPosition();
+        float cx = (float)(Mth.lerp((double) partialTicks, this.xo, this.x) - camPos.x());
+        float cy = (float)(Mth.lerp((double) partialTicks, this.yo, this.y) - camPos.y());
+        float cz = (float)(Mth.lerp((double) partialTicks, this.zo, this.z) - camPos.z());
+
+        float size = this.getQuadSize(partialTicks);
+        float u0 = this.getU0();
+        float u1 = this.getU1();
+        float v0 = this.getV0();
+        float v1 = this.getV1();
+        int light = this.getLightColor(partialTicks);
+
+        float[][] corners = { { 1,-1}, { 1, 1}, {-1, 1}, {-1,-1} };
+        float[][] uvs = { {u1,v1}, {u1,v0}, {u0,v0}, {u0,v1} };
+
+        for (int i = 0; i < 4; i++) {
+            Vector3f v = new Vector3f(corners[i][0], corners[i][1], 0.0F)
+                .rotate(rotation)
+                .mul(size)
+                .add(cx, cy, cz);
+            buffer.vertex(v.x(), v.y(), v.z())
+                .uv(uvs[i][0], uvs[i][1])
+                .color(this.rCol, this.gCol, this.bCol, this.alpha)
+                .uv2(light)
+                .endVertex();
+        }
+    }
 	</#if>
 
 	@Override public void tick() {
