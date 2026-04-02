@@ -1,8 +1,11 @@
-if(${input$entity} instanceof Player _player && _player.level() instanceof ServerLevel _serverLevel && _player.containerMenu instanceof ${JavaModName}Menus.MenuAccessor _menu) {
+if(${input$entity} instanceof Player _player && _player.containerMenu instanceof ${JavaModName}Menus.MenuAccessor _menu) {
 	Slot _slot = _menu.getSlots().get(${opt.toInt(input$slotid)});
 	ItemStack stack = _slot.getItem();
 	if (stack != null && !stack.isEmpty()) {
-		stack.hurtAndBreak(${opt.toInt(input$amount)}, _serverLevel, null, _stkprov -> {});
+		stack.hurtAndBreak(${opt.toInt(input$amount)}, RandomSource.create(), null, () -> {
+			stack.shrink(1);
+			stack.setDamageValue(0);
+		});
 		_slot.set(stack);
 		_slot.setChanged();
 		_player.containerMenu.broadcastChanges();

@@ -65,15 +65,15 @@ public class ${name}Screen extends AbstractContainerScreen<${name}Menu> implemen
 	</#list>
 
 	<#if data.renderBgLayer>
-	private static final ResourceLocation BACKGROUND = ResourceLocation.parse("${modid}:textures/screens/${registryname}.png");
+	private static final ResourceLocation BACKGROUND = new ResourceLocation("${modid}:textures/screens/${registryname}.png");
 	</#if>
 
 	<#list data.getComponentsOfType("Image") as component>
-	private static final ResourceLocation IMAGE_${component?index} = ResourceLocation.parse("${modid}:textures/screens/${component.image}");
+	private static final ResourceLocation IMAGE_${component?index} = new ResourceLocation("${modid}:textures/screens/${component.image}");
 	</#list>
 
 	<#list data.getComponentsOfType("Sprite") as component>
-	private static final ResourceLocation SPRITE_${component?index} = ResourceLocation.parse("${modid}:textures/screens/${component.sprite}");
+	private static final ResourceLocation SPRITE_${component?index} = new ResourceLocation("${modid}:textures/screens/${component.sprite}");
 	</#list>
 
 	<#list sliders as component>

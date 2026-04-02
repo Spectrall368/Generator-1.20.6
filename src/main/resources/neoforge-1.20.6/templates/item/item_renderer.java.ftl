@@ -42,7 +42,7 @@ package ${package}.client.renderer.item;
 	private final Map<Integer, EntityModel<?>> models = new HashMap<>();
 	private final long start;
 
-	private final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.parse("${data.texture.format("%s:textures/item/%s")}.png");
+	private final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation("${data.texture.format("%s:textures/item/%s")}.png");
 
 	public ${name}ItemRenderer(BlockEntityRenderDispatcher blockEntityRenderDispatcher, EntityModelSet entityModelSet) {
 		super(blockEntityRenderDispatcher, entityModelSet);
