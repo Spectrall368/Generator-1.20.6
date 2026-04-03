@@ -67,7 +67,7 @@ public class ${JavaModName}Items {
 			public static <#if !has_chunks>final</#if> DeferredItem<Item> ${item.getModElement().getRegistryNameUpper()}_SPAWN_EGG;
 		<#elseif item.getModElement().getTypeString() == "fluid" && item.generateBucket>
 			public static <#if !has_chunks>final</#if> DeferredItem<Item> ${item.getModElement().getRegistryNameUpper()}_BUCKET;
-		<#elseif item.getModElement().getTypeString() != "specialentity">
+		<#else>
 			public static <#if !has_chunks>final</#if> DeferredItem<Item> ${item.getModElement().getRegistryNameUpper()};
 		</#if>
 	</#list>
@@ -99,7 +99,11 @@ public class ${JavaModName}Items {
 						() -> new DeferredSpawnEggItem(${JavaModName}Entities.${item.getModElement().getRegistryNameUpper()},
 						${item.spawnEggBaseColor.getRGB()}, ${item.spawnEggDotColor.getRGB()}, new Item.Properties()));
 			<#elseif item.getModElement().getTypeString() == "specialentity">
-            <#-- Not supported -->
+				${item.getModElement().getRegistryNameUpper()} =
+					REGISTRY.register("${item.getModElement().getRegistryName()}",
+						() -> new BoatItem(<#if item.entityType == "Boat">false<#else>true</#if>,
+						Boat.Type.OAK,
+						new Item.Properties().stacksTo(1)));
 			<#elseif item.getModElement().getTypeString() == "dimension" && item.hasIgniter()>
 				${item.getModElement().getRegistryNameUpper()} =
 					REGISTRY.register("${item.getModElement().getRegistryName()}", ${item.getModElement().getName()}Item::new);
