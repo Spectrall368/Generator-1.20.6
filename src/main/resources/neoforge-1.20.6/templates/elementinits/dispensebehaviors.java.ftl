@@ -115,11 +115,6 @@ package ${package}.init;
 			</#if>
 			);
 			</#list>
-			<#list specialentities as entity>
-			DispenserBlock.registerBehavior(${JavaModName}Items.${entity.getModElement().getRegistryNameUpper()}.get(),
-					new BoatDispenseItemBehavior(${JavaModName}BoatTypes.${entity.getModElement().getRegistryNameUpper()}_TYPE.getValue()
-					<#if entity.entityType == "ChestBoat">, true</#if>));
-			</#list>
 		});
 	}
 
