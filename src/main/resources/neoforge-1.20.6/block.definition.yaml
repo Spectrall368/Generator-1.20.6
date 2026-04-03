@@ -640,10 +640,6 @@ tags:
     condition:
       - "blockBase %= Door"
       - "!blockSetType %= OAK"
-  - tag: BLOCKS:minecraft:mob_interactable_doors
-    condition:
-      - "blockBase %= Door"
-      - "blockSetType %= STONE"
   - tag: BLOCKS:minecraft:wooden_pressure_plates
     condition:
       - "blockBase %= PressurePlate"
