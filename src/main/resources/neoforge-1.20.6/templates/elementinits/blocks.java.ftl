@@ -61,7 +61,7 @@ package ${package}.init;
 <#assign chunks = blocks?chunk(2500)>
 <#assign has_chunks = chunks?size gt 1>
 
-<#if signs?size != 0>@EventBusSubscriber </#if>public class ${JavaModName}Blocks {
+<#if signs?size != 0>@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)</#if>public class ${JavaModName}Blocks {
 
 	public static final DeferredRegister.Blocks REGISTRY = DeferredRegister.createBlocks(${JavaModName}.MODID);
 
@@ -142,14 +142,21 @@ package ${package}.init;
 	</#if>
 
 	<#if signs?size != 0>
-	@SubscribeEvent public static void registerSigns(BlockEntityTypeAddBlocksEvent event) {
+	@SubscribeEvent public static void registerSigns(SpawnPlacementRegisterEvent event) {
 		<#list signs as block>
-			event.modify(BlockEntityType.<#if block.blockBase == "HangingSign">HANGING_</#if>SIGN,
+			modify(BlockEntityType.<#if block.blockBase == "HangingSign">HANGING_</#if>SIGN,
 					${block.getModElement().getRegistryNameUpper()}.get(), ${block.getWallRegistryNameUpper()}.get());
 		</#list>
 	}
+
+    private static void modify(BlockEntityType<?> blockEntityType, Block... blocksToAdd) {
+        Set<Block> currentValidBlocks = new HashSet<>(blockEntityType.getValidBlocks());
+
+        for (Block block : blocksToAdd)
+            currentValidBlocks.add(block);
+
+        ((BlockEntityTypeAccessor) blockEntityType).setValidBlocks(currentValidBlocks);
+    }
 	</#if>
-
 }
-
 <#-- @formatter:on -->
