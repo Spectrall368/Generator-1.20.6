@@ -306,7 +306,7 @@ public class ${name}Item extends FishingRodItem {
 	</#if>
 	<#list data.attributeModifiers as modifier>
 	.add(${modifier.attribute}, new AttributeModifier(
-			"${w.getUUID(registryname + "_" + modifier?index)}",
+			UUID.fromString("${w.getUUID(registryname + "_" + modifier?index)}"), "Tool modifier",
 			${modifier.amount}, AttributeModifier.Operation.${modifier.operation}), ${generator.map(modifier.equipmentSlot, "equipmentslots")})
 	</#list>
 	.build()
