@@ -16,8 +16,8 @@ global_templates:
   # Dispense behaviors are controlled by generator.yaml
 
 tags:
-  - tag: ENTITIES:c:boats
-    condition: "entityType %= ChestBoat"
+#  - tag: ENTITIES:c:boats
+#    condition: "entityType %= ChestBoat"
   - tag: ITEMS:minecraft:boats
     condition: "entityType %= Boat"
   - tag: ITEMS:minecraft:chest_boats
